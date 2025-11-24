@@ -16,6 +16,7 @@ public class UserController {
     public Map<String, Object> user(@AuthenticationPrincipal OAuth2User principal) {
         if (principal == null) {
             return Map.of("error", "Not authenticated");
+
         }
 
         Map<String, Object> response = new HashMap<>();
