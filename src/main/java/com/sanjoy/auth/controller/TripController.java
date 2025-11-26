@@ -1,5 +1,8 @@
 package com.sanjoy.auth.controller;
 
+import com.sanjoy.auth.dto.ItineraryRequest;
+import com.sanjoy.auth.dto.ItineraryResponse;
+import com.sanjoy.auth.service.ItineraryService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -8,7 +11,9 @@ import com.sanjoy.auth.model.Trip;
 import com.sanjoy.auth.model.User;
 import com.sanjoy.auth.repository.TripRepository;
 import com.sanjoy.auth.repository.UserRepository;
-
+import com.sanjoy.auth.service.ItineraryService;
+import org.springframework.http.ResponseEntity;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 @RestController
@@ -20,6 +25,10 @@ public class TripController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ItineraryService itineraryService;
+
 
     @PostMapping("/create")
     public Trip createTrip(@RequestBody Trip trip, @AuthenticationPrincipal OAuth2User principal) {
@@ -121,4 +130,61 @@ public class TripController {
 
         return email;
     }
+
+    // Get single trip details (for details page)
+    @GetMapping("/{id}")
+    public ResponseEntity<Trip> getTripById(@PathVariable Long id) {
+        Trip trip = tripRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Trip not found"));
+        return ResponseEntity.ok(trip);
+    }
+
+    // Generate itinerary
+    @PostMapping("/{id}/generate-itinerary")
+    public ResponseEntity<String> generateItinerary(
+            @PathVariable Long id,
+            @RequestBody(required = false) String userPrompt,
+            @AuthenticationPrincipal OAuth2User principal) {
+
+        String email = getEmailFromPrincipal(principal);
+        Trip trip = tripRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Trip not found"));
+
+        // Authorization: Only creator can generate itinerary
+        if (!trip.getCreator().getEmail().equals(email)) {
+            return ResponseEntity.status(403).body("Unauthorized");
+        }
+
+        // Build comprehensive trip details for AI
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
+        long days = (trip.getEndDate().getTime() - trip.getStartDate().getTime()) / (1000 * 60 * 60 * 24) + 1;
+
+        String tripDetails = String.format(
+                "Create a %d-day itinerary for:\n" +
+                        "Destination: %s\n" +
+                        "Dates: %s to %s (%d days)\n" +
+                        "Budget: ₹%.2f per person\n" +
+                        "Group: %d males, %d females\n" +
+                        "Additional preferences: %s",
+                days,
+                trip.getDestination(),
+                dateFormat.format(trip.getStartDate()),
+                dateFormat.format(trip.getEndDate()),
+                days,
+                trip.getBudget(),
+                trip.getMaleCount(),
+                trip.getFemaleCount(),
+                userPrompt != null ? userPrompt : "Standard sightseeing and local experiences"
+        );
+
+        // Generate using AI
+        String generatedItinerary = itineraryService.generateItinerary(tripDetails);
+
+        // Save to database
+        trip.setItinerary(generatedItinerary);
+        tripRepository.save(trip);
+
+        return ResponseEntity.ok(generatedItinerary);
+    }
+
 }

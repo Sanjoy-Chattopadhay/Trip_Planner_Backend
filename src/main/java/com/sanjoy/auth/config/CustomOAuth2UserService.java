@@ -20,7 +20,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     public OAuth2User loadUser(OAuth2UserRequest userRequest) {
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
-        // Get the provider name (google or github)
+        // Get the provider name (google or GitHub)
         String provider = userRequest.getClientRegistration().getRegistrationId();
 
         // Extract user details based on provider - use FINAL variables

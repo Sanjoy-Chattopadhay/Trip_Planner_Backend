@@ -19,9 +19,10 @@ public class Trip {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date startDate;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date endDate;
+
     private Boolean femaleAllowed;
     private Integer maleCount;
     private Integer femaleCount;
@@ -74,4 +75,12 @@ public class Trip {
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+
+    @Column(columnDefinition = "TEXT")
+    private String itinerary;
+
+    // Add getter and setter
+    public String getItinerary() { return itinerary; }
+    public void setItinerary(String itinerary) { this.itinerary = itinerary; }
+
 }

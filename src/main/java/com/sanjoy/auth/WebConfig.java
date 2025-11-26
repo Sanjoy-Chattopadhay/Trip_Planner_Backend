@@ -1,4 +1,4 @@
-package com.sanjoy.auth.config;
+package com.sanjoy.auth;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

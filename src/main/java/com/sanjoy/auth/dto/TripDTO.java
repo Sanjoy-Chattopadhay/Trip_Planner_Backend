@@ -17,12 +17,13 @@ public class TripDTO {
     private Long creatorId;
     private String creatorName;
     private String creatorEmail;
+    private String itinerary;
 
     // Constructor
     public TripDTO(Long id, String destination, Double budget, Date startDate,
                    Date endDate, Boolean femaleAllowed, Integer maleCount,
                    Integer femaleCount, String status, Long creatorId,
-                   String creatorName, String creatorEmail) {
+                   String creatorName, String creatorEmail, String itinerary) {
         this.id = id;
         this.destination = destination;
         this.budget = budget;
@@ -35,6 +36,8 @@ public class TripDTO {
         this.creatorId = creatorId;
         this.creatorName = creatorName;
         this.creatorEmail = creatorEmail;
+        this.itinerary = itinerary;
+
     }
 
     // Getters and Setters
@@ -73,4 +76,8 @@ public class TripDTO {
 
     public String getCreatorEmail() { return creatorEmail; }
     public void setCreatorEmail(String creatorEmail) { this.creatorEmail = creatorEmail; }
+
+    // Add getter and setter
+    public String getItinerary() { return itinerary; }
+    public void setItinerary(String itinerary) { this.itinerary = itinerary; }
 }
