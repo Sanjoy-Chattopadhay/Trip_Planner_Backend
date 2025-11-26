@@ -19,7 +19,6 @@ public class Trip {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date startDate;
-
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date endDate;
 
@@ -82,5 +81,4 @@ public class Trip {
     // Add getter and setter
     public String getItinerary() { return itinerary; }
     public void setItinerary(String itinerary) { this.itinerary = itinerary; }
-
 }
