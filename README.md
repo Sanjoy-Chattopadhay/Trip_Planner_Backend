@@ -1,25 +1,7 @@
-cat > README.md << 'EOF'
 # TripPlanner Spring Boot Backend
 
 This is the backend for the TripPlanner project. It manages user authentication, trip creation/joining, trip dashboard, profile management, and integrates with LangChain4j for AI-powered itinerary generation.
 
----
-
-## Table of Contents
-
-- [Features](#features)
-- [Technology Stack](#technology-stack)
-- [Project Structure](#project-structure)
-- [Setup and Installation](#setup-and-installation)
-- [Application Properties](#application-properties)
-- [Dependencies](#dependencies)
-- [Database](#database)
-- [Running the Application](#running-the-application)
-- [API Endpoints](#api-endpoints)
-- [LangChain4j & OpenAI Integration](#langchain4j--openai-integration)
-- [Troubleshooting](#troubleshooting)
-
----
 
 ## Features
 
